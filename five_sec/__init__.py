@@ -17,7 +17,9 @@ def create_app():
     from . import models
 
     # bp
-    from .views import main_views
+    from .views import main_views, question_views, static_views
     app.register_blueprint(main_views.bp)
+    app.register_blueprint(question_views.bp)
+    app.register_blueprint(static_views.bp)
 
     return app

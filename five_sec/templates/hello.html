@@ -2,10 +2,23 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Hello</title>
+    <title>Simple Test</title>
 </head>
 <body>
-    <h1>Hello World</h1>
-    <p>Flask 잘 돌아감</p>
+    <h1>Flask URL 테스트</h1>
+
+    <ul>
+        <li>
+            <a href="{{ url_for('question.question') }}">
+                question.question
+            </a>
+        </li>
+        <li>
+            <a href="{{ url_for('static.static') }}">
+                static.static
+            </a>
+        </li>
+    </ul>
+
 </body>
 </html>
