@@ -4,10 +4,7 @@ from werkzeug.utils import redirect
 bp = Blueprint('main', __name__, url_prefix='/')
 
 
-@bp.route('/hello')
+@bp.route('/')
 def hello():
     return render_template('hello.html')
 
-@bp.route('/')
-def index():
-    return 'Pybo index'

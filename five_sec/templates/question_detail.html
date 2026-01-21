@@ -17,27 +17,27 @@
     <div class="card">
         <div class="card-body text-center">
 
-            <h4 class="mb-4">{{ question.subject }}</h4>
+            <h4 class="mb-4">{{ question_.subject }}</h4>
 
             <div class="d-grid gap-3">
                 <button class="btn btn-outline-secondary btn-lg">
-                    {{ question.left_text }}
+                    <a href="{{ url_for('question.start') }}">
+                        {{ question_.left_text }}
+                    </a>
                 </button>
 
-                <button class="btn btn-outline-primary btn-lg">
-                    {{ question.right_text }}
+
+                <button class="btn btn-outline-secondary btn-lg">
+                    <a href="{{ url_for('question.start') }}">
+                        {{ question_.right_text }}
+                    </a>
                 </button>
             </div>
 
         </div>
     </div>
 
-    <div class="text-center mt-4">
-        <a href="{{ url_for('question.question_list') }}"
-           class="text-decoration-none text-muted">
-            ← 질문 목록으로
-        </a>
-    </div>
+
 
 </div>
 
