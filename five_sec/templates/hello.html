@@ -2,23 +2,119 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Simple Test</title>
-</head>
-<body>
-    <h1>Flask URL 테스트</h1>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5 Seconds</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    <ul>
-        <li>
-            <a href="{{ url_for('question.question') }}">
-                question.question
-            </a>
-        </li>
-        <li>
-            <a href="{{ url_for('static.static') }}">
-                static.static
-            </a>
-        </li>
-    </ul>
+        body {
+            height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #0f0f13;
+            font-family: 'Pretendard', sans-serif;
+            color: #fff;
+            padding: 24px;
+        }
+
+        .scene {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 48px;
+        }
+
+        .header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: #666;
+        }
+
+        .title {
+            font-size: 2.8rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+        }
+
+        .title span {
+            background: linear-gradient(135deg, #ff6b6b, #5b9fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .btn-start {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background: #fff;
+            color: #0f0f13;
+            font-family: 'Pretendard', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: transform 0.15s ease, background 0.15s ease;
+        }
+        .btn-start:hover {
+            transform: translateY(-2px);
+            background: #e8e8f0;
+        }
+        .btn-start:active {
+            transform: translateY(0);
+        }
+
+        .footer {
+            font-size: 0.75rem;
+            color: #333;
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="scene">
+
+    <div class="header">
+        <p class="logo">5 Seconds</p>
+        <h1 class="title">5초 만에<br><span>선택하세요</span></h1>
+        <p class="subtitle">5초 만에 선택하세요.<br>오늘의 감정을 고민 없이, 직감으로 기록하세요.<br>당신의 직감이 가장 솔직한 일기입니다.</p>
+    </div>
+
+    <a href="{{ url_for('question.question') }}" class="btn-start">
+        시작하기
+    </a>
+
+    <p class="footer">© 5 Seconds</p>
+
+</div>
 
 </body>
 </html>
