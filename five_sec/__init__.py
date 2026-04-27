@@ -3,6 +3,7 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
 import config
+from five_sec.views import login_views
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -22,5 +23,6 @@ def create_app():
     app.register_blueprint(main_views.bp)
     app.register_blueprint(question_views.bp)
     app.register_blueprint(static_views.bp)
+    app.register_blueprint(login_views.bp)
 
     return app
