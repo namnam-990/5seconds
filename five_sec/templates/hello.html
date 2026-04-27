@@ -45,6 +45,16 @@
             color: #666;
         }
 
+        .username {
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .username span {
+            color: #fff;
+            font-weight: 600;
+        }
+
         .title {
             font-size: 2.8rem;
             font-weight: 700;
@@ -104,6 +114,7 @@
 
     <div class="header">
         <p class="logo">5 Seconds</p>
+        <p class="username">안녕하세요, <span>{{ current_user.username }}</span>님</p>
         <h1 class="title">5초 만에<br><span>선택하세요</span></h1>
         <p class="subtitle">5초 만에 선택하세요.<br>오늘의 감정을 고민 없이, 직감으로 기록하세요.<br>당신의 직감이 가장 솔직한 일기입니다.</p>
     </div>
