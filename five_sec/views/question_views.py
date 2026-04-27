@@ -2,19 +2,14 @@ from flask import Blueprint, render_template, url_for, session
 from werkzeug.utils import redirect
 from sqlalchemy import func
 from five_sec.models import Question
-import random
 
 bp = Blueprint('question', __name__, url_prefix='/question')
 
 
 @bp.route('/')
 def question():
-    session["question_ids"] = list()
-    while len(session["question_ids"]) < 5:
-        temp_num = random.randint(1, 20)
-        if temp_num not in session["question_ids"]:
-            session["question_ids"].append(temp_num)
-
+    questions = Question.query.order_by(func.random()).limit(5).all()
+    session["question_ids"] = [q.id for q in questions]
     return redirect(url_for('question.start'))
 
 @bp.route('/start')
