@@ -1,8 +1,9 @@
 from flask import Blueprint, render_template, url_for, session
 from werkzeug.utils import redirect
 from sqlalchemy import func
-from flask_login import login_required
-from five_sec.models import Question
+from flask_login import login_required, current_user
+from five_sec import db
+from five_sec.models import Question, Static
 
 bp = Blueprint('question', __name__, url_prefix='/question')
 
@@ -30,6 +31,22 @@ def start():
 def question_detail(question_id):
     question_ = Question.query.get_or_404(question_id)
     return render_template('question_detail.html', question_=question_)
+
+@bp.route('/<int:question_id>/choose/<side>')
+@login_required
+def choose(question_id, side):
+    question_ = Question.query.get_or_404(question_id)
+    score = question_.left_score if side == 'left' else question_.right_score
+
+    stat = Static.query.get(current_user.id)
+    if stat is None:
+        stat = Static(id=current_user.id, energy=0, social=0, action=0, mood=0)
+        db.session.add(stat)
+
+    setattr(stat, question_.category, getattr(stat, question_.category) + score)
+    db.session.commit()
+
+    return redirect(url_for('question.start'))
 
 @bp.route('/end')
 @login_required

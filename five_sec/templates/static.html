@@ -2,10 +2,228 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Hello</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5 Seconds — 통계</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #0f0f13;
+            font-family: 'Pretendard', sans-serif;
+            color: #fff;
+            padding: 24px;
+        }
+
+        .scene {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        /* 상단 헤더 */
+        .header {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .logo {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: #555;
+        }
+
+        .title {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+        }
+
+        .title span {
+            background: linear-gradient(135deg, #ff6b6b, #5b9fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 0.85rem;
+            color: #555;
+            margin-top: 4px;
+        }
+
+        /* 총점 카드 */
+        .total-card {
+            background: #1a1a22;
+            border: 1px solid #2a2a35;
+            border-radius: 16px;
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .total-label {
+            font-size: 0.85rem;
+            color: #666;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        .total-score {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff6b6b, #5b9fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* 카테고리 목록 */
+        .categories {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .category-row {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .category-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .category-name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .category-icon {
+            font-size: 1rem;
+        }
+
+        .category-score {
+            font-size: 0.9rem;
+            color: #888;
+            font-weight: 600;
+        }
+
+        .bar-track {
+            width: 100%;
+            height: 8px;
+            background: #1e1e28;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 999px;
+            transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .bar-fill.energy { background: linear-gradient(90deg, #ff6b6b, #ff9966); }
+        .bar-fill.social { background: linear-gradient(90deg, #5b9fff, #7ec8e3); }
+        .bar-fill.action { background: linear-gradient(90deg, #a78bfa, #c084fc); }
+        .bar-fill.mood   { background: linear-gradient(90deg, #34d399, #6ee7b7); }
+
+        /* 하단 버튼 */
+        .btn-back {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: transparent;
+            color: #aaa;
+            font-family: 'Pretendard', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border: 1px solid #2a2a35;
+            border-radius: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: color 0.15s ease, border-color 0.15s ease;
+        }
+        .btn-back:hover {
+            color: #fff;
+            border-color: #555;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #2a2a35;
+            letter-spacing: 0.05em;
+        }
+
+        /* 점수 0점일 때 안내 */
+        .empty-hint {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #444;
+            padding: 8px 0;
+        }
+    </style>
 </head>
 <body>
-    <h1>Hello World</h1>
-    <p>여기는 static</p>
+
+<div class="scene">
+
+    <div class="header">
+        <p class="logo">5 Seconds</p>
+        <h1 class="title">나의 <span>통계</span></h1>
+        <p class="subtitle">지금까지 선택한 결과가 쌓인 내 모습입니다.</p>
+    </div>
+
+    <div class="total-card">
+        <span class="total-label">TOTAL SCORE</span>
+        <span class="total-score">{{ total }}</span>
+    </div>
+
+    <div class="categories">
+        {% for cat in categories %}
+        <div class="category-row">
+            <div class="category-meta">
+                <span class="category-name">
+                    <span class="category-icon">{{ cat.icon }}</span>
+                    {{ cat.label }}
+                </span>
+                <span class="category-score">{{ cat.score }}점</span>
+            </div>
+            <div class="bar-track">
+                <div class="bar-fill {{ cat.key }}" style="width: {{ cat.pct }}%"></div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if total == 0 %}
+    <p class="empty-hint">아직 기록이 없습니다. 질문에 답하면 통계가 쌓여요!</p>
+    {% endif %}
+
+    <a href="/" class="btn-back">← 홈으로</a>
+
+    <p class="footer">© 5 Seconds</p>
+
+</div>
+
 </body>
 </html>

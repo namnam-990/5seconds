@@ -177,8 +177,8 @@
     const tintLeft   = document.getElementById('tintLeft');
     const tintRight  = document.getElementById('tintRight');
 
-    const leftUrl  = "{{ url_for('question.start') }}";
-    const rightUrl = "{{ url_for('question.start') }}";
+    const leftUrl  = "{{ url_for('question.choose', question_id=question_.id, side='left') }}";
+    const rightUrl = "{{ url_for('question.choose', question_id=question_.id, side='right') }}";
 
     let startX = 0, currentX = 0, isDragging = false;
     const THRESHOLD = 90;
