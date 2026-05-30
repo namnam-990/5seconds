@@ -13,6 +13,15 @@ bp = Blueprint('question', __name__, url_prefix='/question')
 def question():
     questions = Question.query.order_by(func.random()).limit(5).all()
     session["question_ids"] = [q.id for q in questions]
+
+    stat = Static.query.get(current_user.id)
+    session["scores_before"] = {
+        'energy': stat.energy if stat else 0,
+        'social': stat.social if stat else 0,
+        'action': stat.action if stat else 0,
+        'mood':   stat.mood   if stat else 0,
+    }
+
     return redirect(url_for('question.start'))
 
 @bp.route('/start')
@@ -51,4 +60,35 @@ def choose(question_id, side):
 @bp.route('/end')
 @login_required
 def end():
-    return redirect(url_for('main.hello'))
+    stat  = Static.query.get(current_user.id)
+    before = session.get("scores_before", {'energy': 0, 'social': 0, 'action': 0, 'mood': 0})
+
+    after = {
+        'energy': stat.energy if stat else 0,
+        'social': stat.social if stat else 0,
+        'action': stat.action if stat else 0,
+        'mood':   stat.mood   if stat else 0,
+    }
+
+    max_score = 80
+
+    categories = [
+        {'key': 'energy', 'label': '에너지', 'icon': '⚡',
+         'before_pct': round(before['energy'] / max_score * 100),
+         'after_pct':  round(after['energy']  / max_score * 100),
+         'delta': after['energy'] - before['energy']},
+        {'key': 'social', 'label': '사회성', 'icon': '🤝',
+         'before_pct': round(before['social'] / max_score * 100),
+         'after_pct':  round(after['social']  / max_score * 100),
+         'delta': after['social'] - before['social']},
+        {'key': 'action', 'label': '행동력', 'icon': '🎯',
+         'before_pct': round(before['action'] / max_score * 100),
+         'after_pct':  round(after['action']  / max_score * 100),
+         'delta': after['action'] - before['action']},
+        {'key': 'mood',   'label': '기분',   'icon': '😊',
+         'before_pct': round(before['mood']   / max_score * 100),
+         'after_pct':  round(after['mood']    / max_score * 100),
+         'delta': after['mood'] - before['mood']},
+    ]
+
+    return render_template('result.html', categories=categories)

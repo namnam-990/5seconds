@@ -18,14 +18,15 @@ def static():
         'action': stat.action,
         'mood':   stat.mood,
     }
-    max_score = max(scores.values()) or 1
+    max_score = 80
 
     categories = [
-        {'key': 'energy', 'label': '에너지',  'icon': '⚡', 'score': stat.energy, 'pct': round(stat.energy / max_score * 100)},
-        {'key': 'social', 'label': '사회성',  'icon': '🤝', 'score': stat.social, 'pct': round(stat.social / max_score * 100)},
-        {'key': 'action', 'label': '행동력',  'icon': '🎯', 'score': stat.action, 'pct': round(stat.action / max_score * 100)},
-        {'key': 'mood',   'label': '기분',    'icon': '😊', 'score': stat.mood,   'pct': round(stat.mood   / max_score * 100)},
+        {'key': 'energy', 'label': '에너지',  'icon': '⚡', 'score': stat.energy, 'pct': max(0, round(stat.energy / max_score * 100))},
+        {'key': 'social', 'label': '사회성',  'icon': '🤝', 'score': stat.social, 'pct': max(0, round(stat.social / max_score * 100))},
+        {'key': 'action', 'label': '행동력',  'icon': '🎯', 'score': stat.action, 'pct': max(0, round(stat.action / max_score * 100))},
+        {'key': 'mood',   'label': '기분',    'icon': '😊', 'score': stat.mood,   'pct': max(0, round(stat.mood   / max_score * 100))},
     ]
+
     total = sum(scores.values())
 
     return render_template('static.html', categories=categories, total=total)
