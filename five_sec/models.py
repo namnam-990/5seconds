@@ -1,4 +1,7 @@
+from sqlalchemy import ForeignKey
+
 from five_sec import db
+from flask_login import UserMixin
 
 class Question(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -16,3 +19,15 @@ class Question(db.Model):
     # 선택 시 점수 (해당 카테고리 기준)
     left_score = db.Column(db.Integer, nullable=False)
     right_score = db.Column(db.Integer, nullable=False)
+
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(50), unique=True, nullable=False)
+    password = db.Column(db.String(200), nullable=False)
+
+class Static(db.Model):
+    id = db.Column(db.Integer, ForeignKey('user.id'), primary_key=True)
+    energy = db.Column(db.Integer, nullable=False, default=0)
+    social = db.Column(db.Integer, nullable=False, default=0)
+    action = db.Column(db.Integer, nullable=False, default=0)
+    mood =  db.Column(db.Integer, nullable=False, default=0)

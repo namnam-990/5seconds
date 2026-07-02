@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>5 Seconds</title>
+    <title>로그인 — 5 Seconds</title>
     <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -26,14 +26,14 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 48px;
+            gap: 40px;
         }
 
         .header {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
             text-align: center;
         }
 
@@ -45,18 +45,8 @@
             color: #666;
         }
 
-        .username {
-            font-size: 0.9rem;
-            color: #555;
-        }
-
-        .username span {
-            color: #fff;
-            font-weight: 600;
-        }
-
         .title {
-            font-size: 2.8rem;
+            font-size: 2.4rem;
             font-weight: 700;
             letter-spacing: -0.03em;
             line-height: 1.1;
@@ -69,14 +59,35 @@
             background-clip: text;
         }
 
-        .subtitle {
-            font-size: 0.95rem;
-            color: #666;
-            line-height: 1.6;
+        .form-box {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
-        .btn-start {
-            display: block;
+        .form-box input {
+            width: 100%;
+            padding: 16px 18px;
+            background: #1a1a22;
+            border: 1px solid #2a2a35;
+            border-radius: 14px;
+            color: #fff;
+            font-family: 'Pretendard', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.15s ease;
+        }
+
+        .form-box input::placeholder {
+            color: #444;
+        }
+
+        .form-box input:focus {
+            border-color: #5b9fff;
+        }
+
+        .btn-login {
             width: 100%;
             padding: 18px;
             background: #fff;
@@ -88,16 +99,28 @@
             border: none;
             border-radius: 16px;
             cursor: pointer;
-            text-decoration: none;
-            text-align: center;
             transition: transform 0.15s ease, background 0.15s ease;
+            margin-top: 4px;
         }
-        .btn-start:hover {
+
+        .btn-login:hover {
             transform: translateY(-2px);
             background: #e8e8f0;
         }
-        .btn-start:active {
+
+        .btn-login:active {
             transform: translateY(0);
+        }
+
+        .flash {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            border-radius: 12px;
+            color: #ff6b6b;
+            font-size: 0.9rem;
+            text-align: center;
         }
 
         .footer {
@@ -105,46 +128,31 @@
             color: #333;
             letter-spacing: 0.05em;
         }
-
-        .btn-static {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            padding: 10px 18px;
-            background: transparent;
-            color: #666;
-            font-family: 'Pretendard', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 600;
-            border: 1px solid #333;
-            border-radius: 10px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: color 0.15s ease, border-color 0.15s ease;
-        }
-        .btn-static:hover {
-            color: #fff;
-            border-color: #666;
-        }
     </style>
 </head>
 
 <body>
 
-<a href="/static" class="btn-static">통계 보기</a>
-
 <div class="scene">
 
     <div class="header">
         <p class="logo">5 Seconds</p>
-        <p class="username">안녕하세요, <span>{{ current_user.username }}</span>님</p>
-        <h1 class="title">5초 만에<br><span>선택하세요</span></h1>
-        <p class="subtitle">5초 만에 선택하세요.<br>오늘의 감정을 고민 없이, 직감으로 기록하세요.<br>당신의 직감이 가장 솔직한 일기입니다.</p>
+        <h1 class="title"><span>로그인</span></h1>
     </div>
 
-    <a href="{{ url_for('question.question') }}" class="btn-start">
-        시작하기
-    </a>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+                <div class="flash">{{ msg }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form class="form-box" method="post">
+        <input name="username" placeholder="아이디" autocomplete="username">
+        <input name="password" type="password" placeholder="비밀번호" autocomplete="current-password">
+        <button type="submit" class="btn-login">로그인</button>
+    </form>
 
     <p class="footer">© 5 Seconds</p>
 

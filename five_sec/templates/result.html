@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5 Seconds — 결과</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #0f0f13;
+            font-family: 'Pretendard', sans-serif;
+            color: #fff;
+            padding: 24px;
+        }
+
+        .scene {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .header {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .logo {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: #555;
+        }
+
+        .title {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+        }
+
+        .title span {
+            background: linear-gradient(135deg, #ff6b6b, #5b9fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 0.85rem;
+            color: #555;
+            margin-top: 4px;
+        }
+
+        /* 카테고리 목록 */
+        .categories {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .category-row {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            opacity: 0;
+            transform: translateY(12px);
+        }
+
+        .category-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .category-name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .category-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .delta-badge {
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 999px;
+        }
+        .delta-badge.positive {
+            background: rgba(52, 211, 153, 0.15);
+            color: #34d399;
+        }
+        .delta-badge.negative {
+            background: rgba(255, 107, 107, 0.15);
+            color: #ff6b6b;
+        }
+        .delta-badge.zero {
+            background: rgba(255,255,255,0.06);
+            color: #555;
+        }
+
+        .bar-track {
+            width: 100%;
+            height: 10px;
+            background: #1e1e28;
+            border-radius: 999px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 이전 점수 — 흐릿하게 남아있는 기준선 */
+        .bar-before {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            border-radius: 999px;
+            opacity: 0.25;
+        }
+
+        /* 현재 점수 — 애니메이션 바 */
+        .bar-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            border-radius: 999px;
+        }
+
+        .bar-before.energy, .bar-fill.energy { background: linear-gradient(90deg, #ff6b6b, #ff9966); }
+        .bar-before.social, .bar-fill.social { background: linear-gradient(90deg, #5b9fff, #7ec8e3); }
+        .bar-before.action, .bar-fill.action { background: linear-gradient(90deg, #a78bfa, #c084fc); }
+        .bar-before.mood,   .bar-fill.mood   { background: linear-gradient(90deg, #34d399, #6ee7b7); }
+
+        /* 하단 버튼 */
+        .btn-home {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: #fff;
+            color: #0f0f13;
+            font-family: 'Pretendard', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            opacity: 0;
+            transition: transform 0.15s ease, background 0.15s ease;
+        }
+        .btn-home:hover {
+            transform: translateY(-2px);
+            background: #e8e8f0;
+        }
+        .btn-home:active { transform: translateY(0); }
+
+        .footer {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #2a2a35;
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+<body>
+
+<div class="scene">
+
+    <div class="header">
+        <p class="logo">5 Seconds</p>
+        <h1 class="title">오늘의 <span>기록</span></h1>
+        <p class="subtitle">5번의 선택이 당신을 이렇게 바꿨어요.</p>
+    </div>
+
+    <div class="categories">
+        {% for cat in categories %}
+        <div class="category-row" id="row-{{ loop.index0 }}">
+            <div class="category-meta">
+                <span class="category-name">
+                    {{ cat.icon }} {{ cat.label }}
+                </span>
+                <div class="category-right">
+                    <span class="delta-badge
+                        {% if cat.delta > 0 %}positive
+                        {% elif cat.delta < 0 %}negative
+                        {% else %}zero{% endif %}">
+                        {% if cat.delta > 0 %}+{{ cat.delta }}
+                        {% elif cat.delta < 0 %}{{ cat.delta }}
+                        {% else %}—{% endif %}
+                    </span>
+                </div>
+            </div>
+            <div class="bar-track">
+                <div class="bar-before {{ cat.key }}"
+                     style="width: {{ cat.before_pct }}%"></div>
+                <div class="bar-fill {{ cat.key }}"
+                     data-before="{{ cat.before_pct }}"
+                     data-after="{{ cat.after_pct }}"
+                     style="width: 0%"></div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <a href="/" class="btn-home" id="btnHome">홈으로</a>
+
+    <p class="footer">© 5 Seconds</p>
+
+</div>
+
+<script>
+    const rows   = document.querySelectorAll('.category-row');
+    const bars   = document.querySelectorAll('.bar-fill');
+    const btnHome = document.getElementById('btnHome');
+
+    // 1) 각 행을 순서대로 페이드인
+    rows.forEach((row, i) => {
+        setTimeout(() => {
+            row.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+            row.style.opacity    = '1';
+            row.style.transform  = 'translateY(0)';
+        }, 120 * i);
+    });
+
+    // 2) 바를 before 값에서 시작해 after 값까지 애니메이션
+    bars.forEach((bar, i) => {
+        const before = bar.dataset.before;
+        const after  = bar.dataset.after;
+
+        // before 값으로 즉시 세팅 (transition 없이)
+        bar.style.transition = 'none';
+        bar.style.width      = before + '%';
+
+        // 행 페이드인 끝난 뒤 → after 값으로 이동
+        setTimeout(() => {
+            bar.style.transition = 'width 0.9s cubic-bezier(0.22, 1, 0.36, 1)';
+            bar.style.width      = after + '%';
+        }, 120 * i + 350);
+    });
+
+    // 3) 모든 애니메이션 끝나고 버튼 등장
+    const totalDelay = 120 * (rows.length - 1) + 350 + 900 + 200;
+    setTimeout(() => {
+        btnHome.style.transition = 'opacity 0.5s ease';
+        btnHome.style.opacity    = '1';
+    }, totalDelay);
+</script>
+
+</body>
+</html>
